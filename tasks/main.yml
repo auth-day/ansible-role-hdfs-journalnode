@@ -1,0 +1,11 @@
+- name: create {{ hadoop_var_prefix }}/jnedits 
+  file: path={{ hadoop_var_prefix }}/jnedits state=directory owner={{ hadoop_user }} group={{ hadoop_user }} mode=0700
+
+- name: put systemd unit file 
+  template: src=hdfs-journalnode.service.j2 dest=/etc/systemd/system/hdfs-journalnode.service owner=root group=root mode=0644 
+
+- name: reload systemd
+  shell: systemctl daemon-reload 
+
+- name: start service and enable hdfs-journalnode 
+  service: name=hdfs-journalnode state=restarted enabled=yes
